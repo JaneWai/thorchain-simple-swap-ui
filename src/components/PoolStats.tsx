@@ -11,23 +11,23 @@ const PoolStats: React.FC = () => {
       positive: true
     },
     {
-      label: '24h Volume',
-      value: '$45.2M',
-      change: '+8.3%',
-      icon: TrendingUp,
-      positive: true
-    },
-    {
       label: 'Active Pools',
-      value: '156',
+      value: '47',
       change: '+3',
       icon: Zap,
       positive: true
     },
     {
-      label: 'Unique Swappers',
-      value: '12.4K',
-      change: '+15.2%',
+      label: 'Total Swaps (24h)',
+      value: '12,847',
+      change: '+8.2%',
+      icon: TrendingUp,
+      positive: true
+    },
+    {
+      label: 'Unique Users',
+      value: '45.2K',
+      change: '+15.7%',
       icon: Users,
       positive: true
     }
@@ -39,37 +39,30 @@ const PoolStats: React.FC = () => {
       
       <div className="space-y-4">
         {stats.map((stat, index) => (
-          <div key={index} className="flex items-center justify-between p-3 bg-slate-900/30 rounded-lg">
+          <div key={index} className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-emerald-500/20 rounded-lg">
+              <div className="p-2 bg-slate-700/50 rounded-lg">
                 <stat.icon className="w-4 h-4 text-emerald-400" />
               </div>
               <div>
                 <p className="text-sm text-slate-400">{stat.label}</p>
-                <p className="text-lg font-semibold text-white">{stat.value}</p>
+                <p className="font-semibold text-white">{stat.value}</p>
               </div>
             </div>
-            <div className={`text-sm font-medium ${
+            <span className={`text-sm font-medium ${
               stat.positive ? 'text-emerald-400' : 'text-red-400'
             }`}>
               {stat.change}
-            </div>
+            </span>
           </div>
         ))}
       </div>
 
-      <div className="mt-6 p-4 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 rounded-lg border border-emerald-500/20">
-        <div className="flex items-center space-x-2 mb-2">
-          <Zap className="w-4 h-4 text-emerald-400" />
-          <span className="text-sm font-medium text-emerald-400">Network Health</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span className="text-white">Excellent</span>
-          <div className="flex space-x-1">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="w-2 h-2 bg-emerald-400 rounded-full"></div>
-            ))}
-          </div>
+      <div className="mt-6 pt-4 border-t border-slate-700/50">
+        <div className="text-center">
+          <p className="text-sm text-slate-400 mb-2">RUNE Price</p>
+          <p className="text-2xl font-bold text-white">$4.25</p>
+          <p className="text-sm text-emerald-400">+5.2% (24h)</p>
         </div>
       </div>
     </div>

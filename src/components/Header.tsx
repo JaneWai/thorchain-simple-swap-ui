@@ -4,10 +4,19 @@ import { Zap, Menu, X, Globe, Settings } from 'lucide-react'
 interface HeaderProps {
   isConnected: boolean
   setIsConnected: (connected: boolean) => void
+  activeTab: string
+  setActiveTab: (tab: string) => void
 }
 
-const Header: React.FC<HeaderProps> = ({ isConnected, setIsConnected }) => {
+const Header: React.FC<HeaderProps> = ({ isConnected, setIsConnected, activeTab, setActiveTab }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+
+  const navItems = [
+    { id: 'swap', label: 'Swap' },
+    { id: 'runebond', label: 'RUNEBond' },
+    { id: 'pools', label: 'Pools' },
+    { id: 'analytics', label: 'Analytics' }
+  ]
 
   return (
     <header className="border-b border-slate-700/50 bg-slate-900/80 backdrop-blur-xl sticky top-0 z-50">
@@ -28,11 +37,20 @@ const Header: React.FC<HeaderProps> = ({ isConnected, setIsConnected }) => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-slate-300 hover:text-white transition-colors">Swap</a>
-            <a href="#" className="text-slate-300 hover:text-white transition-colors">Pools</a>
-            <a href="#" className="text-slate-300 hover:text-white transition-colors">Analytics</a>
-            <a href="#" className="text-slate-300 hover:text-white transition-colors">Docs</a>
+          <nav className="hidden md:flex items-center space-x-1">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  activeTab === item.id
+                    ? 'bg-emerald-500/20 text-emerald-400'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
           </nav>
 
           {/* Desktop Actions */}
@@ -67,14 +85,26 @@ const Header: React.FC<HeaderProps> = ({ isConnected, setIsConnected }) => {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-slate-700/50">
-            <nav className="flex flex-col space-y-4">
-              <a href="#" className="text-slate-300 hover:text-white transition-colors">Swap</a>
-              <a href="#" className="text-slate-300 hover:text-white transition-colors">Pools</a>
-              <a href="#" className="text-slate-300 hover:text-white transition-colors">Analytics</a>
-              <a href="#" className="text-slate-300 hover:text-white transition-colors">Docs</a>
+            <nav className="flex flex-col space-y-2">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setActiveTab(item.id)
+                    setIsMenuOpen(false)
+                  }}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors text-left ${
+                    activeTab === item.id
+                      ? 'bg-emerald-500/20 text-emerald-400'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
               <button
                 onClick={() => setIsConnected(!isConnected)}
-                className={`px-4 py-2 rounded-lg font-medium transition-all text-left ${
+                className={`px-4 py-2 rounded-lg font-medium transition-all text-left mt-4 ${
                   isConnected
                     ? 'bg-emerald-500 text-white hover:bg-emerald-600'
                     : 'bg-slate-700 text-slate-300 hover:bg-slate-600'

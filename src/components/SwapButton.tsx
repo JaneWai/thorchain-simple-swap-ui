@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Loader2, CheckCircle } from 'lucide-react'
+import React from 'react'
+import { ArrowRight, Wallet } from 'lucide-react'
 
 interface SwapButtonProps {
   isConnected: boolean
@@ -9,51 +9,30 @@ interface SwapButtonProps {
 }
 
 const SwapButton: React.FC<SwapButtonProps> = ({ isConnected, fromAmount, fromToken, toToken }) => {
-  const [isSwapping, setIsSwapping] = useState(false)
-  const [swapComplete, setSwapComplete] = useState(false)
-
-  const handleSwap = async () => {
-    setIsSwapping(true)
-    
-    // Simulate swap process
-    await new Promise(resolve => setTimeout(resolve, 3000))
-    
-    setIsSwapping(false)
-    setSwapComplete(true)
-    
-    // Reset after 2 seconds
-    setTimeout(() => setSwapComplete(false), 2000)
+  if (!isConnected) {
+    return (
+      <button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center space-x-2">
+        <Wallet className="w-5 h-5" />
+        <span>Connect Wallet to Swap</span>
+      </button>
+    )
   }
 
-  const getButtonText = () => {
-    if (!isConnected) return 'Connect Wallet'
-    if (!fromAmount) return 'Enter Amount'
-    if (isSwapping) return 'Swapping...'
-    if (swapComplete) return 'Swap Complete!'
-    return `Swap ${fromToken} for ${toToken}`
+  if (!fromAmount) {
+    return (
+      <button 
+        disabled
+        className="w-full bg-slate-700 text-slate-400 font-semibold py-4 px-6 rounded-xl cursor-not-allowed"
+      >
+        Enter Amount
+      </button>
+    )
   }
-
-  const getButtonStyle = () => {
-    if (swapComplete) return 'bg-emerald-500 hover:bg-emerald-600'
-    if (!isConnected || !fromAmount) return 'bg-slate-600 cursor-not-allowed'
-    return 'bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600'
-  }
-
-  const isDisabled = !isConnected || !fromAmount || isSwapping
 
   return (
-    <button
-      onClick={handleSwap}
-      disabled={isDisabled}
-      className={`w-full py-4 rounded-xl font-semibold text-white transition-all ${getButtonStyle()} ${
-        isDisabled ? 'opacity-50' : ''
-      }`}
-    >
-      <div className="flex items-center justify-center space-x-2">
-        {isSwapping && <Loader2 className="w-5 h-5 animate-spin" />}
-        {swapComplete && <CheckCircle className="w-5 h-5" />}
-        <span>{getButtonText()}</span>
-      </div>
+    <button className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-semibold py-4 px-6 rounded-xl transition-all transform hover:scale-[1.02] flex items-center justify-center space-x-2">
+      <span>Swap {fromToken} for {toToken}</span>
+      <ArrowRight className="w-5 h-5" />
     </button>
   )
 }
